@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seat Assignment</title>
+</head>
+<body>
+    <h1>Seat Assignment Form</h1>
+    <form action="/assign-seats" method="post" enctype="multipart/form-data">
+        <label for="file">Upload CSV:</label>
+        <input type="file" id="file" name="file" accept=".csv" required>
+        <button type="submit">Assign Seats</button>
+    </form>
+</body>
+</html>
