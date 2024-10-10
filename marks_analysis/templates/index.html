@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Course and Person Performance Analysis</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    h1, h2 {
+      color: #333;
+    }
+    .content {
+      max-width: 800px;
+      margin: auto;
+    }
+    .section {
+      margin-bottom: 20px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background-color: #f9f9f9;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    table, th, td {
+      border: 1px solid #ccc;
+    }
+    th, td {
+      padding: 8px;
+      text-align: left;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+  <div class="content">
+    <h1>Course and Person Performance Analysis</h1>
+
+    <!-- Section for Course Analysis -->
+    <div class="section">
+      <h2>Course Analysis</h2>
+      <button onclick="fetchCourseAnalysis()">Get Course Analysis</button>
+      <div id="course-analysis">
+        <!-- Course analysis results will be injected here -->
+      </div>
+    </div>
+
+    <!-- Section for Person Performance -->
+    <div class="section">
+      <h2>Person Performance</h2>
+      <button onclick="fetchPersonPerformance()">Get Person Performance</button>
+      <div id="person-performance">
+        <!-- Person performance results will be injected here -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Function to fetch and display course analysis data
+    function fetchCourseAnalysis() {
+      fetch('/course_analysis')
+        .then(response => response.json())
+        .then(data => {
+          const courseAnalysisDiv = document.getElementById('course-analysis');
+          courseAnalysisDiv.innerHTML = `
+            <h3>${data.course_name}</h3>
+            <p>Total Students: ${data.total_students}</p>
+            <p>Average Marks: ${data.average_marks.toFixed(2)}</p>
+            <p>Median Marks: ${data.median_marks}</p>
+            <p>Min Marks: ${data.min_marks}</p>
+            <p>Max Marks: ${data.max_marks}</p>
+            <p>Standard Deviation: ${data.stddev_marks.toFixed(2)}</p>
+            <h4>Quantile Distribution</h4>
+            <p>25th Percentile: ${data.quantiles['25th_percentile']}</p>
+            <p>50th Percentile: ${data.quantiles['50th_percentile']} (Median)</p>
+            <p>75th Percentile: ${data.quantiles['75th_percentile']}</p>
+            <h4>Range Distribution</h4>
+            <table>
+              <tr><th>Range</th><th>Number of Students</th></tr>
+              <tr><td>90-100</td><td>${data.range_distribution['90-100']}</td></tr>
+              <tr><td>80-89</td><td>${data.range_distribution['80-89']}</td></tr>
+              <tr><td>70-79</td><td>${data.range_distribution['70-79']}</td></tr>
+              <tr><td>60-69</td><td>${data.range_distribution['60-69']}</td></tr>
+              <tr><td>50-59</td><td>${data.range_distribution['50-59']}</td></tr>
+              <tr><td>Below 50</td><td>${data.range_distribution['below 50']}</td></tr>
+            </table>
+            <p>Students Above Average: ${data.students_above_average}</p>
+            <p>Students Below Average: ${data.students_below_average}</p>
+          `;
+        })
+        .catch(error => {
+          console.error('Error fetching course analysis:', error);
+        });
+    }
+
+    // Function to fetch and display person performance data
+    function fetchPersonPerformance() {
+      fetch('/person_performance')
+        .then(response => response.json())
+        .then(data => {
+          const personPerformanceDiv = document.getElementById('person-performance');
+          personPerformanceDiv.innerHTML = `
+            <h3>Person ID: ${data.person_id}</h3>
+            <p>Person's Marks: ${data.person_marks}</p>
+            <p>Rank: ${data.rank} out of ${data.total_students}</p>
+            <p>Percentile: ${data.percentile.toFixed(2)}%</p>
+            <p>Deviation from Average: ${data.deviation_from_average.toFixed(2)}</p>
+            <p>Quantile Category: ${data.quantile_category}</p>
+          `;
+        })
+        .catch(error => {
+          console.error('Error fetching person performance:', error);
+        });
+    }
+  </script>
+</body>
+</html>
